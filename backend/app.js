@@ -4,9 +4,9 @@ const cors = require("cors");
 const userModel = require("./models/userModel");
 const db = require("./utils/db-connection");
 const userRouter = require("./routes/userRouter");
-
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+
 app.use("/user", userRouter);
 
 db.sync({ alter: true })
