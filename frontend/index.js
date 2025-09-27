@@ -3,7 +3,7 @@ async function handleFormSubmit(event) {
     event.preventDefault();
     console.log("handle form subnmit called");
     const userDetails = {
-      name: event.target.name.value,
+      name: event.target.userName.value,
       email: event.target.email.value,
       password: event.target.password.value,
     };
