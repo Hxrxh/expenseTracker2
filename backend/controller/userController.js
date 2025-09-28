@@ -1,28 +1,33 @@
 const userTable = require("../models/userModel");
-
+const bcrypt = require("bcrypt");
 const addUserSignupDetails = async (req, res) => {
   try {
-    console.log(req.body);
     const { name, email, password } = req.body;
-    console.log(name, email, password);
-    const alreadyEmail = await userTable.findAll({
+
+    const alreadyEmail = await userTable.findOne({
       where: {
         email: email,
       },
     });
     if (alreadyEmail) {
-      res.status(500).send("User already exists");
+      res.status(400).json({ message: "User already exists" });
     } else {
-      const addedUserData = await userTable.create({
-        name: name,
-        email: email,
-        password: password,
+      bcrypt.hash(password, 10, async (err, hash) => {
+        if (err) {
+          console.log(err);
+        }
+        const addedUserData = await userTable.create({
+          name: name,
+          email: email,
+          password: hash,
+        });
+        console.log(addedUserData);
+        res.status(201).json({ message: "User signed up!" });
       });
-      res.status(201).json(addedUserData);
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ err: error.message });
+    res.status(500).json(error);
   }
 };
 const handleLogin = async (req, res) => {
@@ -33,20 +38,26 @@ const handleLogin = async (req, res) => {
         email: email,
       },
     });
-    console.log(userFound);
 
     if (!userFound) {
-      return res.status(404).send("User not found.");
+      return res.status(404).json({ message: "User not found." });
     } else {
-      if (userFound.password !== password) {
-        return res.status(401).send("Password Incorrect");
-      } else {
-        return res.status(200).send("User successfully logged in");
-      }
+      bcrypt.compare(password, userFound.password, (err, result) => {
+        if (err) {
+          res.status(500).json({ message: err.message });
+        }
+        if (result == true) {
+          return res
+            .status(200)
+            .json({ message: "User Logged in Successfully" });
+        } else {
+          res.status(401).json({ message: "Incorrect Password" });
+        }
+      });
     }
   } catch (error) {
     console.log(error);
-    return res.status(500).send(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 module.exports = { addUserSignupDetails, handleLogin };

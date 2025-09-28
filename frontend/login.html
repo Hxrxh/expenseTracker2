@@ -22,9 +22,15 @@
 
       <div class="second-row">
         <h3 class="error-box"></h3>
-        <button type="button">Sign Up</button>
+       <button type="button" onclick="togglePages('index')">Sign up</button>
       </div>
     </div>
+    <script>
+    function togglePages() {
+      
+      window.location.href = "frontend\index.html"; // Redirect to page2
+    }
+  </script>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
   <script src="index.js"></script>

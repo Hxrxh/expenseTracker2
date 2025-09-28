@@ -1,25 +1,38 @@
-// async function handleFormSubmit(event) {
-//   try {
-//     event.preventDefault();
-//     console.log("handle form subnmit called");
-//     const userDetails = {
-//       name: event.target.userName.value,
-//       email: event.target.email.value,
-//       password: event.target.password.value,
-//     };
-//     console.log(userDetails);
-//     const response = await axios.post(
-//       "http://localhost:3000/user/signup",
-//       userDetails
-//     );
-//     console.log(response);
-//     // displayItemsOnScreen(response.data);
-//     event.target.reset();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
 const errorBox = document.querySelector(".error-box");
+
+function togglePages(path) {
+  console.log("toggles");
+  window.location.href = `${path}.html`; // Redirect to page2
+}
+async function handleFormSignUp(event) {
+  try {
+    event.preventDefault();
+    console.log("handle form signup called");
+    const userDetails = {
+      name: event.target.userName.value,
+      email: event.target.email.value,
+      password: event.target.password.value,
+    };
+    console.log(userDetails);
+    const response = await axios.post(
+      "http://localhost:3000/user/signup",
+      userDetails
+    );
+    console.log(response);
+    errorBox.textContent = "";
+    alert(response.data.message);
+    // displayItemsOnScreen(response.data);
+    event.target.reset();
+  } catch (err) {
+    console.log(err.response);
+    if (err.response) {
+      errorBox.textContent = err.response.data.message;
+    } else {
+      errorBox.textContent = "Something went wrong. Try again.";
+    }
+  }
+}
+
 async function handleFormSubmit(event) {
   try {
     event.preventDefault();
@@ -33,18 +46,19 @@ async function handleFormSubmit(event) {
       "http://localhost:3000/user/login",
       userDetails
     );
-    console.log(response);
+    console.log(response.data.message);
     errorBox.textContent = "";
-    alert(response.data);
+    alert(response.data.message);
     // displayItemsOnScreen(response.data);
     event.target.reset();
   } catch (err) {
+    console.log(err.response.data.message);
     if (err.response) {
-      errorBox.textContent = err.response.data;
+      errorBox.textContent = err.response.data.message;
     } else {
       errorBox.textContent = "Something went wrong. Try again.";
     }
-    console.log(err);
   }
 }
-module.exports = handleFormSubmit;
+module.exports = { handleFormSignUp, handleFormSubmit, togglePages };
+s;
