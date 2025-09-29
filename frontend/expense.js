@@ -1,0 +1,62 @@
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await axios.get("http://localhost:3000/expense");
+    for (let i = 0; i < res.data.length; i++) {
+      displayExpenseOnScreen(res.data[i]);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+async function handleExpenseForm(event) {
+  try {
+    event.preventDefault();
+    console.log("handle form subnmit called");
+    const expenseDetails = {
+      amount: event.target.amount.value,
+      desc: event.target.desc.value,
+      category: event.target.category.value,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/expense",
+      expenseDetails
+    );
+    console.log(response.data);
+    displayExpenseOnScreen(response.data);
+    event.target.reset();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+function displayExpenseOnScreen(expenseDetails) {
+  const expenseLi = document.createElement("li");
+  expenseLi.dataset.id = expenseDetails.id;
+  const textSpan = document.createElement("span");
+  textSpan.textContent = `${expenseDetails.expenseamount} - ${expenseDetails.description} - ${expenseDetails.category}`;
+  expenseLi.appendChild(textSpan);
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.appendChild(document.createTextNode("Delete"));
+  expenseLi.appendChild(deleteBtn);
+  const expenseList = document.querySelector("ul");
+  expenseList.appendChild(expenseLi);
+
+  deleteBtn.addEventListener("click", () => {
+    deleteExpenseData(expenseDetails.id, expenseLi);
+  });
+}
+
+async function deleteExpenseData(id, li) {
+  try {
+    console.log("deleteExpenseData called.");
+    await axios.delete(`http://localhost:3000/expense/${id}`);
+
+    li.remove();
+  } catch (err) {
+    console.log(err);
+  }
+}
+// Do not touch code below
+module.exports = handleExpenseForm;

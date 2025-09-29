@@ -1,27 +1,25 @@
 const { Sequelize, DataTypes } = require("sequelize");
+const sequelize = require("../utils/db-connection.js");
 
-const sequelize = require("../utils/db-connection");
-
-const userTable = sequelize.define("users", {
+const expenseTable = sequelize.define("expenses", {
   id: {
     type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
     allowNull: false,
-    autoIncrement: true,
   },
-  name: {
+  expenseamount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  description: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
+  category: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 });
 
-module.exports = userTable;
+module.exports = expenseTable;

@@ -48,7 +48,8 @@ async function handleFormSubmit(event) {
     );
     console.log(response.data.message);
     errorBox.textContent = "";
-    alert(response.data.message);
+
+    window.location.href = "expense.html";
     // displayItemsOnScreen(response.data);
     event.target.reset();
   } catch (err) {

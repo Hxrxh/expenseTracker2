@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body style="margin: 0">
+    <form onsubmit="handleExpenseForm(event)">
+      <label for="amount">Choose Expense Amount:</label>
+      <input type="number" name="amount" id="amount" />
+      <label for="desc">Choose Description:</label>
+      <input type="text" name="desc" id="desc" />
+      <label for="category">Select Category:</label>
+      <select id="category" name="category">
+        <option value="electronics">Electronics</option>
+        <option value="books">Books</option>
+        <option value="clothing">Clothing</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+    <ul></ul>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+  <script src="expense.js"></script>
+</html>
