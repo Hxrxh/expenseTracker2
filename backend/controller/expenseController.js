@@ -2,11 +2,14 @@ const expenseTable = require("../models/expenseModel");
 
 const addExpense = async (req, res) => {
   try {
+    const { userId } = req.user;
+    console.log(userId);
     const { amount, desc, category } = req.body;
     const addedExpense = await expenseTable.create({
       expenseamount: amount,
       description: desc,
       category: category,
+      userId: userId,
     });
     res.status(201).json(addedExpense);
   } catch (error) {
@@ -16,7 +19,12 @@ const addExpense = async (req, res) => {
 };
 const getExpenseData = async (req, res) => {
   try {
-    const expenseData = await expenseTable.findAll();
+    const { userId } = req.user;
+    const expenseData = await expenseTable.findAll({
+      where: {
+        userId: userId,
+      },
+    });
     if (!expenseData) {
       res.status(404).json({ message: "expense Data not found" });
     }
@@ -28,10 +36,12 @@ const getExpenseData = async (req, res) => {
 
 const deleteExpense = async (req, res) => {
   try {
+    const { userId } = req.user;
     const { id } = req.params;
     const deletedData = await expenseTable.destroy({
       where: {
         id: id,
+        userId: userId,
       },
     });
     res.status(200).send("Successfully deleted");

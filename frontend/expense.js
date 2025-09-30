@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const res = await axios.get("http://localhost:3000/expense");
+    let token = localStorage.getItem("token");
+    const res = await axios.get("http://localhost:3000/expense", {
+      headers: { Authorization: token },
+    });
+
     for (let i = 0; i < res.data.length; i++) {
       displayExpenseOnScreen(res.data[i]);
     }
@@ -13,14 +17,19 @@ async function handleExpenseForm(event) {
   try {
     event.preventDefault();
     console.log("handle form subnmit called");
+
     const expenseDetails = {
       amount: event.target.amount.value,
       desc: event.target.desc.value,
       category: event.target.category.value,
     };
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       "http://localhost:3000/expense",
-      expenseDetails
+      expenseDetails,
+      {
+        headers: { Authorization: token },
+      }
     );
     console.log(response.data);
     displayExpenseOnScreen(response.data);
@@ -51,7 +60,10 @@ function displayExpenseOnScreen(expenseDetails) {
 async function deleteExpenseData(id, li) {
   try {
     console.log("deleteExpenseData called.");
-    await axios.delete(`http://localhost:3000/expense/${id}`);
+    const token = localStorage.getItem("token");
+    await axios.delete(`http://localhost:3000/expense/${id}`, {
+      headers: { Authorization: token },
+    });
 
     li.remove();
   } catch (err) {

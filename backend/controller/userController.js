@@ -1,5 +1,6 @@
 const userTable = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const addUserSignupDetails = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -27,8 +28,12 @@ const addUserSignupDetails = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json(error);
+    res.status(500).json({ message: error.message });
   }
+};
+
+const generateToken = (id) => {
+  return jwt.sign({ userId: id }, "98cpe05ad32jil3cadffe42klax9321kdees0");
 };
 const handleLogin = async (req, res) => {
   try {
@@ -47,9 +52,10 @@ const handleLogin = async (req, res) => {
           res.status(500).json({ message: err.message });
         }
         if (result == true) {
-          return res
-            .status(200)
-            .json({ message: "User Logged in Successfully" });
+          return res.status(200).json({
+            message: "User Logged in Successfully",
+            token: generateToken(userFound.id),
+          });
         } else {
           res.status(401).json({ message: "Incorrect Password" });
         }

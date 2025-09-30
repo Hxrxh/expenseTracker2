@@ -1,0 +1,21 @@
+const jwt = require("jsonwebtoken");
+const userTable = require("../models/userModel");
+const authentication = async (req, res, next) => {
+  try {
+    const token = req.header("Authorization");
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const user = jwt.verify(token, "98cpe05ad32jil3cadffe42klax9321kdees0");
+
+    userTable.findByPk(user.userId).then(() => {
+      req.user = user;
+      next();
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false });
+  }
+};
+module.exports = { authentication };

@@ -4,6 +4,7 @@ const cors = require("cors");
 const userModel = require("./models/userModel");
 const db = require("./utils/db-connection");
 const userRouter = require("./routes/userRouter");
+require("./models");
 const expenseRouter = require("./routes/expenseRouter");
 app.use(express.json());
 app.use(cors());

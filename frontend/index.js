@@ -46,7 +46,9 @@ async function handleFormSubmit(event) {
       "http://localhost:3000/user/login",
       userDetails
     );
-    console.log(response.data.message);
+    // console.log(response.data.message, response.data.token);
+    console.log(response.data.token)
+    localStorage.setItem("token", response.data.token);
     errorBox.textContent = "";
 
     window.location.href = "expense.html";
