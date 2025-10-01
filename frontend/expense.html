@@ -5,9 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
   </head>
 
   <body style="margin: 0">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+      "
+    >
+      <h2 style="margin: 0">Expense Tracker</h2>
+      <button
+        id="renderBtn"
+        style="
+          padding: 8px 15px;
+
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        "
+      >
+        Buy Premium
+      </button>
+    </div>
     <form onsubmit="handleExpenseForm(event)">
       <label for="amount">Choose Expense Amount:</label>
       <input type="number" name="amount" id="amount" />
@@ -25,4 +48,5 @@
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
   <script src="expense.js"></script>
+  <script src="payment.js"></script>
 </html>

@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const userModel = require("./models/userModel");
+
 const db = require("./utils/db-connection");
+const paymentRouter = require("./routes/paymentRouter");
 const userRouter = require("./routes/userRouter");
 require("./models");
 const expenseRouter = require("./routes/expenseRouter");
@@ -11,6 +13,7 @@ app.use(cors());
 
 app.use("/user", userRouter);
 app.use("/expense", expenseRouter);
+app.use("/pay", paymentRouter);
 db.sync({ alter: true })
   .then(() => {
     app.listen(3000, () => {
