@@ -1,6 +1,23 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     let token = localStorage.getItem("token");
+    // If arriving from payment redirect, we may have status params
+    const url = new URL(window.location.href);
+    const paymentStatus = url.searchParams.get("status");
+    const orderId = url.searchParams.get("orderId");
+    if (paymentStatus) {
+      const banner = document.createElement("div");
+      banner.style.padding = "10px";
+      banner.style.margin = "10px";
+      banner.style.borderRadius = "6px";
+      banner.style.color = "#0b1";
+      banner.style.background = paymentStatus === "Success" ? "#e8f9ef" : paymentStatus === "Pending" ? "#fff8e1" : "#fdecea";
+      banner.style.color = paymentStatus === "Success" ? "#256029" : paymentStatus === "Pending" ? "#8a6d3b" : "#a94442";
+      banner.textContent = `Payment ${paymentStatus}${orderId ? ` (Order ${orderId})` : ""}`;
+      document.body.prepend(banner);
+      // Optionally clean the query params
+      window.history.replaceState({}, document.title, "/expense.html");
+    }
     const res = await axios.get("http://localhost:3000/expense", {
       headers: { Authorization: token },
     });

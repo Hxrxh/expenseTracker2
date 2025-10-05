@@ -54,7 +54,8 @@ const paymentStatus = async (req, res) => {
         }
       );
     }
-    res.send(`<h1>${orderStatus}</h1>`);
+    // Redirect back to expense page with status info; token remains in localStorage
+    res.redirect(302, `/expense.html?orderId=${encodeURIComponent(orderId)}&status=${encodeURIComponent(orderStatus)}`);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
