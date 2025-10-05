@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const path = require("path");
 const userModel = require("./models/userModel");
 
 const db = require("./utils/db-connection");
@@ -10,6 +11,9 @@ require("./models");
 const expenseRouter = require("./routes/expenseRouter");
 app.use(express.json());
 app.use(cors());
+
+// Serve frontend static files so pages share the same origin as backend
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.use("/user", userRouter);
 app.use("/expense", expenseRouter);
