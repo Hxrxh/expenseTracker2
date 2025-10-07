@@ -9,10 +9,11 @@ const authentication = async (req, res, next) => {
 
     const user = jwt.verify(token, "98cpe05ad32jil3cadffe42klax9321kdees0");
 
-    userTable.findByPk(user.userId).then(() => {
-      req.user = user;
+    const userData = await userTable.findByPk(user.userId);
+    if (userData) {
+      req.user = userData;
       next();
-    });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false });

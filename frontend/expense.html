@@ -31,6 +31,11 @@
         Buy Premium
       </button>
     </div>
+    <div
+      id="premium-user"
+      style="display: flex; align-items: center; height: auto"
+    ></div>
+    <ul id="leaderboard"></ul>
     <form onsubmit="handleExpenseForm(event)">
       <label for="amount">Choose Expense Amount:</label>
       <input type="number" name="amount" id="amount" />
@@ -44,7 +49,7 @@
       </select>
       <button type="submit">Submit</button>
     </form>
-    <ul></ul>
+    <ul id="expenseList"></ul>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
   <script src="expense.js"></script>

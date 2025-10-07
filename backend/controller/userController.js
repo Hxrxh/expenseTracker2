@@ -66,4 +66,23 @@ const handleLogin = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-module.exports = { addUserSignupDetails, handleLogin };
+
+const checkPremium = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const userData = await userTable.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!userData) {
+      res.status(404).json({
+        message: "No user found",
+      });
+    }
+    res.status(200).json({ isPremium: userData.isPremium });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+module.exports = { addUserSignupDetails, handleLogin, checkPremium };

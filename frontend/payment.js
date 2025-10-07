@@ -3,7 +3,15 @@ const cashfree = Cashfree({
 });
 document.getElementById("renderBtn").addEventListener("click", async () => {
   try {
-    const response = await axios.post("http://localhost:3000/pay");
+    let token = localStorage.getItem("token");
+    console.log(token);
+    const response = await axios.post(
+      "http://localhost:3000/pay",
+      {},
+      {
+        headers: { Authorization: token },
+      }
+    );
     const paymentSessionId = response.data.paymentSessionId;
 
     let checkoutOptions = {

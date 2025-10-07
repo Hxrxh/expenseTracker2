@@ -3,7 +3,10 @@ const {
   getPaymentStatus,
 } = require("../services/cashfree-service");
 
+const jwt = require("jsonwebtoken");
+
 const paymentTable = require("../models/payment");
+const { userTable } = require("../models");
 
 const paymentProcess = async (req, res) => {
   try {
@@ -12,6 +15,7 @@ const paymentProcess = async (req, res) => {
     const orderCurrency = "INR";
     const customerId = "1";
     const customerPhone = "9999999099";
+    const userId = req.user.id;
 
     const paymentSessionId = await createOrder(
       orderId,
@@ -26,6 +30,7 @@ const paymentProcess = async (req, res) => {
       orderAmount,
       orderCurrency,
       paymentStatus: "Pending",
+      userId: userId,
     });
     res.json({ paymentSessionId, orderId });
   } catch (error) {
@@ -37,6 +42,10 @@ const paymentStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
     const orderStatus = await getPaymentStatus(orderId);
+    console.log(orderStatus);
+    if (!orderStatus) {
+      return res.status(500).send("No order status found");
+    }
     const paymentdata = await paymentTable.findOne({
       where: {
         orderId: orderId,
@@ -53,10 +62,21 @@ const paymentStatus = async (req, res) => {
           },
         }
       );
+      await userTable.update(
+        {
+          isPremium: true,
+        },
+        {
+          where: {
+            id: paymentdata.userId,
+          },
+        }
+      );
+      return res.redirect(`http://127.0.0.1:5500/frontend/expense.html`);
     }
-    res.send(`<h1>${orderStatus}</h1>`);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 module.exports = { paymentProcess, paymentStatus };

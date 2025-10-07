@@ -22,6 +22,7 @@ const userTable = sequelize.define("users", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  isPremium: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
 module.exports = userTable;

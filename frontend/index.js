@@ -33,7 +33,7 @@ async function handleFormSignUp(event) {
   }
 }
 
-async function handleFormSubmit(event) {
+async function handleFormLogin(event) {
   try {
     event.preventDefault();
     console.log("handle form subnmit called");
@@ -47,7 +47,7 @@ async function handleFormSubmit(event) {
       userDetails
     );
     // console.log(response.data.message, response.data.token);
-    console.log(response.data.token)
+    console.log(response.data.token);
     localStorage.setItem("token", response.data.token);
     errorBox.textContent = "";
 
@@ -63,5 +63,4 @@ async function handleFormSubmit(event) {
     }
   }
 }
-module.exports = { handleFormSignUp, handleFormSubmit, togglePages };
-s;
+module.exports = { handleFormSignUp, handleFormLogin, togglePages };

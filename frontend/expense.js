@@ -1,12 +1,18 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     let token = localStorage.getItem("token");
+
+    checkPremium(token);
+
     const res = await axios.get("http://localhost:3000/expense", {
       headers: { Authorization: token },
     });
-
-    for (let i = 0; i < res.data.length; i++) {
-      displayExpenseOnScreen(res.data[i]);
+    if (!res.data) {
+      console.log("NO expense data");
+    } else {
+      for (let i = 0; i < res.data.length; i++) {
+        displayExpenseOnScreen(res.data[i]);
+      }
     }
   } catch (err) {
     console.log(err);
@@ -38,7 +44,54 @@ async function handleExpenseForm(event) {
     console.log(err);
   }
 }
+async function checkPremium(token) {
+  try {
+    console.log(token, "checkPremium Called");
+    const res = await axios.get("http://localhost:3000/user/check-premium", {
+      headers: { Authorization: token },
+    });
+    console.log(res.data, "checkPremium called");
+    if (res.data.isPremium) {
+      const premiumDiv = document.getElementById("premium-user");
+      const heading = document.createElement("h2");
+      heading.textContent = "You are a Premium User now!";
+      premiumDiv.appendChild(heading);
 
+      const showLeaderboardButton = document.createElement("button");
+      showLeaderboardButton.appendChild(
+        document.createTextNode("show Leaderboard")
+      );
+
+      premiumDiv.appendChild(showLeaderboardButton);
+
+      showLeaderboardButton.addEventListener("click", () => {
+        showLeaderboard();
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function showLeaderboard() {
+  try {
+    const leaderboardContainer = document.getElementById("leaderboard");
+    leaderboardContainer.innerHTML = "";
+    const leaderboardData = await axios.get(
+      "http://localhost:3000/premium/leaderboard"
+    );
+    console.log(leaderboardData.data.userTotalExpense);
+    const userInfo = leaderboardData.data.userTotalExpense;
+
+    for (let i = 0; i < userInfo.length; i++) {
+      const textSpan = document.createElement("li");
+      textSpan.textContent = `Name - ${userInfo[i].user.name} - TotalExpense - ${userInfo[i].total}`;
+      leaderboardContainer.appendChild(textSpan);
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 function displayExpenseOnScreen(expenseDetails) {
   const expenseLi = document.createElement("li");
   expenseLi.dataset.id = expenseDetails.id;
@@ -49,7 +102,7 @@ function displayExpenseOnScreen(expenseDetails) {
   const deleteBtn = document.createElement("button");
   deleteBtn.appendChild(document.createTextNode("Delete"));
   expenseLi.appendChild(deleteBtn);
-  const expenseList = document.querySelector("ul");
+  const expenseList = document.getElementById("expenseList");
   expenseList.appendChild(expenseLi);
 
   deleteBtn.addEventListener("click", () => {

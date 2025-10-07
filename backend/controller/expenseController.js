@@ -2,7 +2,7 @@ const expenseTable = require("../models/expenseModel");
 
 const addExpense = async (req, res) => {
   try {
-    const { userId } = req.user;
+    const { id: userId } = req.user;
     console.log(userId);
     const { amount, desc, category } = req.body;
     const addedExpense = await expenseTable.create({
@@ -19,7 +19,7 @@ const addExpense = async (req, res) => {
 };
 const getExpenseData = async (req, res) => {
   try {
-    const { userId } = req.user;
+    const { id: userId } = req.user;
     const expenseData = await expenseTable.findAll({
       where: {
         userId: userId,
@@ -36,7 +36,7 @@ const getExpenseData = async (req, res) => {
 
 const deleteExpense = async (req, res) => {
   try {
-    const { userId } = req.user;
+    const { id: userId } = req.user;
     const { id } = req.params;
     const deletedData = await expenseTable.destroy({
       where: {

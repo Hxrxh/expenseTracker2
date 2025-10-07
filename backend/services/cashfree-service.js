@@ -20,6 +20,7 @@ const createOrder = async (
       order_amount: orderAmount,
       order_currency: orderCurrency,
       order_id: orderId,
+      
       customer_details: {
         customer_id: customerId,
         customer_phone: customerPhone,
@@ -38,20 +39,20 @@ const createOrder = async (
 };
 const getPaymentStatus = async (orderId) => {
   try {
-    const response = await Cashfree.PGOrderFetchPayments("2023-08-01", orderId);
+    const response = await cashfree.PGOrderFetchPayments(orderId);
     const getOrderResponse = response.data;
     let orderStatus;
 
     if (
-      getOrderResponse.filter(
+      getOrderResponse.some(
         (transaction) => transaction.payment_status === "SUCCESS"
-      ).length > 0
+      )
     ) {
       orderStatus = "Success";
     } else if (
-      getOrderResponse.filter(
+      getOrderResponse.some(
         (transaction) => transaction.payment_status === "PENDING"
-      ).length > 0
+      )
     ) {
       orderStatus = "Pending";
     } else {
@@ -60,6 +61,8 @@ const getPaymentStatus = async (orderId) => {
     return orderStatus;
   } catch (error) {
     console.log(error);
+    return error;
   }
 };
+
 module.exports = { createOrder, getPaymentStatus };
