@@ -1,3 +1,4 @@
+const { userTable } = require("../models");
 const expenseTable = require("../models/expenseModel");
 
 const addExpense = async (req, res) => {
@@ -5,12 +6,21 @@ const addExpense = async (req, res) => {
     const { id: userId } = req.user;
     console.log(userId);
     const { amount, desc, category } = req.body;
+
     const addedExpense = await expenseTable.create({
       expenseamount: amount,
       description: desc,
       category: category,
       userId: userId,
     });
+    await userTable.increment(
+      { totalExpense: amount },
+      {
+        where: {
+          id: userId,
+        },
+      }
+    );
     res.status(201).json(addedExpense);
   } catch (error) {
     console.log(error);

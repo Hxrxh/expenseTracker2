@@ -80,12 +80,12 @@ async function showLeaderboard() {
     const leaderboardData = await axios.get(
       "http://localhost:3000/premium/leaderboard"
     );
-    console.log(leaderboardData.data.userTotalExpense);
+    console.log(leaderboardData);
     const userInfo = leaderboardData.data.userTotalExpense;
 
     for (let i = 0; i < userInfo.length; i++) {
       const textSpan = document.createElement("li");
-      textSpan.textContent = `Name - ${userInfo[i].user.name} - TotalExpense - ${userInfo[i].total}`;
+      textSpan.textContent = `Name - ${userInfo[i].name} - TotalExpense - ${userInfo[i].totalExpense}`;
       leaderboardContainer.appendChild(textSpan);
     }
   } catch (error) {
