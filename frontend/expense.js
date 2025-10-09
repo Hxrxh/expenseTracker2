@@ -23,11 +23,17 @@ async function handleExpenseForm(event) {
   try {
     event.preventDefault();
     console.log("handle form subnmit called");
-
+    const prompt = { prompt: event.target.desc.value };
+    console.log(prompt);
+    const AicategoryResponse = await axios.post(
+      "http://localhost:3000/getCategory",
+      prompt
+    );
+    console.log(AicategoryResponse);
     const expenseDetails = {
       amount: event.target.amount.value,
       desc: event.target.desc.value,
-      category: event.target.category.value,
+      category: AicategoryResponse.data.category,
     };
     const token = localStorage.getItem("token");
     const response = await axios.post(

@@ -7,6 +7,7 @@ const db = require("./utils/db-connection");
 const paymentRouter = require("./routes/paymentRouter");
 const userRouter = require("./routes/userRouter");
 const premiumRouter = require("./routes/premiumRouter");
+const aiRouter = require("./routes/AiRouter");
 const path = require("path");
 require("./models");
 const expenseRouter = require("./routes/expenseRouter");
@@ -17,6 +18,7 @@ app.use("/user", userRouter);
 app.use("/expense", expenseRouter);
 app.use("/pay", paymentRouter);
 app.use("/premium", premiumRouter);
+app.use("/getCategory", aiRouter);
 db.sync({ alter: true })
   .then(() => {
     app.listen(3000, () => {
