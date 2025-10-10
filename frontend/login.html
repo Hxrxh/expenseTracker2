@@ -17,20 +17,23 @@
           <label for="password">Enter your password:</label>
           <input type="password" name="password" id="password" required />
           <button type="submit">Login</button>
+       
         </form>
+        
       </div>
 
       <div class="second-row">
         <h3 class="error-box"></h3>
        <button type="button" onclick="togglePages('index')">Sign up</button>
+        <button type='button' onclick="handleForgotPass()">Forgot password</button>
       </div>
     </div>
-    <script>
+    <!-- <script>
     function togglePages() {
       
       window.location.href = "frontend\index.html"; // Redirect to page2
     }
-  </script>
+  </script> -->
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
   <script src="index.js"></script>

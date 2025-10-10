@@ -63,4 +63,29 @@ async function handleFormLogin(event) {
     }
   }
 }
-module.exports = { handleFormSignUp, handleFormLogin, togglePages };
+async function handleSendEmail(event) {
+  try {
+    event.preventDefault();
+    await axios.post("http://localhost:3000/called/password/forgotpassword", {
+      email: event.target.email.value,
+    });
+    window.location.href = "login.html";
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function handleForgotPass() {
+  try {
+    console.log("handleForgotPass called");
+    window.location.href = "forgotPass.html";
+  } catch (error) {
+    console.log(error);
+  }
+}
+module.exports = {
+  handleFormSignUp,
+  handleFormLogin,
+  togglePages,
+  handleForgotPass,
+  handleSendEmail,
+};
