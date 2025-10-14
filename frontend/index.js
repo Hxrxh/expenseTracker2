@@ -66,9 +66,12 @@ async function handleFormLogin(event) {
 async function handleSendEmail(event) {
   try {
     event.preventDefault();
-    await axios.post("http://localhost:3000/called/password/forgotpassword", {
-      email: event.target.email.value,
-    });
+    await axios.post(
+      "http://localhost:3000/password/called/password/forgotpassword",
+      {
+        email: event.target.email.value,
+      }
+    );
     window.location.href = "login.html";
   } catch (error) {
     console.log(error);
@@ -82,10 +85,3 @@ async function handleForgotPass() {
     console.log(error);
   }
 }
-module.exports = {
-  handleFormSignUp,
-  handleFormLogin,
-  togglePages,
-  handleForgotPass,
-  handleSendEmail,
-};

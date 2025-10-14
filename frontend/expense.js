@@ -130,4 +130,3 @@ async function deleteExpenseData(id, li) {
   }
 }
 // Do not touch code below
-module.exports = handleExpenseForm;

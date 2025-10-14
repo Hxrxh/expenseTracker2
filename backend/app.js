@@ -20,8 +20,8 @@ app.use("/expense", expenseRouter);
 app.use("/pay", paymentRouter);
 app.use("/premium", premiumRouter);
 app.use("/getCategory", aiRouter);
-app.use("/called", forgotPassRouter);
-db.sync({ alter: true })
+app.use("/password", forgotPassRouter);
+db.sync()
   .then(() => {
     app.listen(3000, () => {
       console.log("Server is running");
