@@ -27,6 +27,10 @@ const userTable = sequelize.define("users", {
     type: DataTypes.INTEGER,
     defaultValue: 0,
   },
+  totalIncome:{
+    type:DataTypes.INTEGER,
+    defaultValue:0
+  }
 });
 
 module.exports = userTable;

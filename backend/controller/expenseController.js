@@ -6,7 +6,7 @@ const addExpense = async (req, res) => {
   try {
     const { id: userId } = req.user;
     console.log(userId);
-    const { amount, desc, category } = req.body;
+    const { amount, desc, category, type } = req.body;
 
     const addedExpense = await expenseTable.create(
       {
@@ -14,20 +14,33 @@ const addExpense = async (req, res) => {
         description: desc,
         category: category,
         userId: userId,
+        type: type,
       },
       {
         transaction: t,
       }
     );
-    await userTable.increment(
-      { totalExpense: amount },
-      {
-        where: {
-          id: userId,
-        },
-        transaction: t,
-      }
-    );
+    if (type == "expense") {
+      await userTable.increment(
+        { totalExpense: amount },
+        {
+          where: {
+            id: userId,
+          },
+          transaction: t,
+        }
+      );
+    } else {
+      await userTable.increment(
+        { totalIncome: amount },
+        {
+          where: {
+            id: userId,
+          },
+          transaction: t,
+        }
+      );
+    }
     await t.commit();
     res.status(201).json(addedExpense);
   } catch (error) {
@@ -66,8 +79,12 @@ const deleteExpense = async (req, res) => {
       },
       transaction: t,
     });
+    if (expenseData.type == "expense") {
+      user.totalExpense -= expenseData.expenseamount;
+    } else {
+      user.totalIncome -= expenseData.expenseamount;
+    }
 
-    user.totalExpense -= expenseData.expenseamount;
     await user.save({ transaction: t });
     const deletedData = await expenseTable.destroy({
       where: {

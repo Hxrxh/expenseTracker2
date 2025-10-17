@@ -16,12 +16,12 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, "../frontend")));
 app.use("/user", userRouter);
-app.use("/expense", expenseRouter);
+app.use("/transaction", expenseRouter);
 app.use("/pay", paymentRouter);
 app.use("/premium", premiumRouter);
 app.use("/getCategory", aiRouter);
 app.use("/password", forgotPassRouter);
-db.sync()
+db.sync({ alter: true })
   .then(() => {
     app.listen(3000, () => {
       console.log("Server is running");
