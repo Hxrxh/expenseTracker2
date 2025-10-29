@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
+
     <style>
       body {
         font-family: "Poppins", sans-serif;
@@ -145,6 +146,140 @@
       ul#expenseList li button:hover {
         background-color: #b91c1c;
       }
+      #premiumDiv select option {
+        background-color: #0f2027;
+        color: white;
+        font-weight: 500;
+        padding: 0.5rem;
+        cursor: none;
+      }
+
+      #premiumDiv {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        color: white;
+        cursor: none;
+      }
+
+      /* --- Buttons --- */
+      #premiumDiv button {
+        background: linear-gradient(135deg, #1e90ff, #0077ff);
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        padding: 0.8rem 1.4rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+      }
+
+      #premiumDiv button:hover {
+        transform: translateY(-3px);
+        background: linear-gradient(135deg, #339cff, #1a7fff);
+        box-shadow: 0 6px 15px rgba(0, 123, 255, 0.6);
+      }
+
+      #premiumDiv button:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
+      }
+
+      /* --- Select Dropdown --- */
+      #premiumDiv select {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: #fff;
+        border: 2px solid #66b2ff;
+        border-radius: 12px;
+        padding: 0.7rem 1rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.25s ease;
+        box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+      }
+
+      #premiumDiv select:hover {
+        border-color: #99ccff;
+        box-shadow: 0 5px 12px rgba(0, 153, 255, 0.5);
+      }
+
+      #premiumDiv select:focus {
+        border-color: #3399ff;
+        box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.4);
+      }
+
+      #premiumDiv {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        color: white;
+      }
+
+      /* --- Buttons --- */
+      #premiumDiv button {
+        background: linear-gradient(135deg, #1e90ff, #0077ff);
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        padding: 0.8rem 1.4rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+      }
+
+      #premiumDiv button:hover {
+        transform: translateY(-3px);
+        background: linear-gradient(135deg, #339cff, #1a7fff);
+        box-shadow: 0 6px 15px rgba(0, 123, 255, 0.6);
+      }
+
+      #premiumDiv button:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
+      }
+
+      /* --- Select Dropdown --- */
+      #premiumDiv select {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: #fff;
+        border: 2px solid #66b2ff;
+        border-radius: 12px;
+        padding: 0.7rem 1rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.25s ease;
+        box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+      }
+
+      #premiumDiv select:hover {
+        border-color: #99ccff;
+        box-shadow: 0 5px 12px rgba(0, 153, 255, 0.5);
+      }
+
+      #premiumDiv select:focus {
+        border-color: #3399ff;
+        box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.4);
+      }
     </style>
   </head>
 
@@ -172,11 +307,11 @@
         <button type="submit">Add Transaction</button>
       </form>
 
-      <!-- <div id="balance">Balance: ₹0</div> -->
-
       <ul id="expenseList"></ul>
-
-      <div id="premium-user"></div>
+      <div id="pagination"></div>
+      <div id="premiumDiv">
+        <ul id="filteredExpense"></ul>
+      </div>
       <ul id="leaderboard"></ul>
     </main>
 

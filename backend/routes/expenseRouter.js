@@ -12,6 +12,11 @@ router.get(
   userAuthentication.authentication,
   expenseController.getExpenseData
 );
+router.get(
+  "/filteredTransactions",
+  userAuthentication.authentication,
+  expenseController.getFilteredTransaction
+);
 router.delete(
   "/:id",
   userAuthentication.authentication,

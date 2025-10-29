@@ -3,22 +3,83 @@ document.addEventListener("DOMContentLoaded", async () => {
     let token = localStorage.getItem("token");
 
     checkPremium(token);
-
-    const res = await axios.get("http://localhost:3000/transaction", {
-      headers: { Authorization: token },
-    });
-    if (!res.data) {
-      console.log("NO expense data");
-    } else {
-      for (let i = 0; i < res.data.length; i++) {
-        displayTransactionOnScreen(res.data[i]);
-      }
-    }
+    loadTransactions(1);
+    // const res = await axios.get("http://localhost:3000/transaction", {
+    //   headers: { Authorization: token },
+    // });
+    // if (!res.data) {
+    //   console.log("NO expense data");
+    // } else {
+    //   for (let i = 0; i < res.data.length; i++) {
+    //     displayTransactionOnScreen(res.data[i]);
+    //   }
+    // }
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
 });
+async function loadTransactions(page) {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(
+      `http://localhost:3000/transaction?page=${page}`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    const expenseList = document.getElementById("expenseList");
+    expenseList.innerHTML = "";
+    const expenses = res.data.expenseData;
+    expenses.forEach((expense) => {
+      displayTransactionOnScreen(expense);
+    });
 
+    //pagination logic
+    renderPagination(res.data);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+async function renderPagination(paginationData) {
+  try {
+    const paginationDiv = document.getElementById("pagination");
+    paginationDiv.innerHTML = "";
+    const totalPages = paginationData.totalPages;
+    const currentPage = paginationData.currentPage;
+
+    //prev button
+    const prev = document.createElement("button");
+    prev.textContent = "Prev";
+    prev.disabled = currentPage === 1;
+    prev.addEventListener("click", () => {
+      loadTransactions(currentPage - 1);
+    });
+    paginationDiv.appendChild(prev);
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+    if (currentPage <= 2) {
+      endPage = Math.min(5, totalPages);
+    }
+    if (currentPage >= totalPages - 1) {
+      startPage = Math.max(1, totalPages - 4);
+    }
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.textContent = i;
+      pageBtn.disabled = i === currentPage;
+      pageBtn.onclick = () => loadTransactions(i);
+      paginationDiv.appendChild(pageBtn);
+    }
+    //next button
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "Next";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => loadTransactions(currentPage + 1);
+    paginationDiv.appendChild(nextBtn);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 async function handleTransactionForm(event) {
   try {
     event.preventDefault();
@@ -59,7 +120,7 @@ async function checkPremium(token) {
     });
     console.log(res.data, "checkPremium called");
     if (res.data.isPremium) {
-      const premiumDiv = document.getElementById("premium-user");
+      const premiumDiv = document.getElementById("premiumDiv");
       const heading = document.createElement("h2");
       heading.textContent = "You are a Premium User now!";
       premiumDiv.appendChild(heading);
@@ -75,6 +136,31 @@ async function checkPremium(token) {
       premiumDiv.appendChild(downloadButton);
       downloadButton.addEventListener("click", () => {
         downloadExpenses();
+      });
+      const expenseCategory = document.createElement("select");
+      // expenseCategory.name = "filterSelect";
+      ["Yearly", "Monthly", "Weekly"].forEach((period) => {
+        const opt = document.createElement("option");
+        opt.value = period.toLowerCase();
+        opt.textContent = period;
+        expenseCategory.appendChild(opt);
+      });
+      premiumDiv.appendChild(expenseCategory);
+      expenseCategory.addEventListener("change", async (e) => {
+        try {
+          const filteredCategory = e.target.value;
+          console.log(filteredCategory);
+          const filterdData = await axios.get(
+            `http://localhost:3000/transaction/filteredTransactions?type=${filteredCategory}`,
+            {
+              headers: { Authorization: token },
+            }
+          );
+
+          displayFilteredTransactions(filterdData.data);
+        } catch (error) {
+          console.log(error.message);
+        }
       });
       showLeaderboardButton.addEventListener("click", () => {
         showLeaderboard();
@@ -154,4 +240,25 @@ async function downloadExpenses() {
     console.log(error.message);
   }
 }
-// Do not touch code below
+
+function displayFilteredTransactions(expenses) {
+  const filteredList = document.getElementById("filteredExpense");
+  filteredList.innerHTML = ""; // clear previous
+  if (!expenses || expenses.length === 0) {
+    const li = document.createElement("li");
+    li.textContent = "No transactions found for this period.";
+    filteredList.appendChild(li);
+    return;
+  }
+
+  const items = Array.isArray(expenses) ? expenses : [expenses];
+  items.forEach((expenseDetails) => {
+    const expenseLi = document.createElement("li");
+    expenseLi.dataset.id = expenseDetails.id;
+    expenseLi.classList.add(expenseDetails.type || "expense");
+    const textSpan = document.createElement("span");
+    textSpan.textContent = `${expenseDetails.expenseamount} - ${expenseDetails.description} - ${expenseDetails.category}`;
+    expenseLi.appendChild(textSpan);
+    filteredList.appendChild(expenseLi);
+  });
+}

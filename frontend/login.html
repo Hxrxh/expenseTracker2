@@ -7,6 +7,95 @@
     <title>Document</title>
     
   </head>
+<style>
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 340px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  label {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: -0.4rem;
+  }
+
+  input {
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    transition: 0.25s;
+  }
+
+  input:focus {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+  }
+
+  button {
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, #1e90ff, #0077ff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #339cff, #1a7fff);
+    box-shadow: 0 6px 18px rgba(0, 123, 255, 0.5);
+  }
+
+  button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
+  }
+
+  .second-row {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .error-box {
+    color: #ff6666;
+    font-size: 0.9rem;
+    height: 1rem;
+  }
+</style>
 
   <body style="margin: 0">
     <div class="container" style:{display:"flex"}>
