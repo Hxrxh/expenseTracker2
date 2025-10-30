@@ -53,7 +53,8 @@ const addExpense = async (req, res) => {
 const getExpenseData = async (req, res) => {
   try {
     const page = +req.query.page || 1;
-    const limit = 10;
+    const limit = +req.query.limit || 5;
+    console.log(limit);
     const offset = (page - 1) * limit;
     const { id: userId } = req.user;
     const { count, rows: expenseData } = await expenseTable.findAndCountAll({

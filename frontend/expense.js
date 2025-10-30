@@ -1,80 +1,120 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     let token = localStorage.getItem("token");
-
     checkPremium(token);
-    loadTransactions(1);
-    // const res = await axios.get("http://localhost:3000/transaction", {
-    //   headers: { Authorization: token },
-    // });
-    // if (!res.data) {
-    //   console.log("NO expense data");
-    // } else {
-    //   for (let i = 0; i < res.data.length; i++) {
-    //     displayTransactionOnScreen(res.data[i]);
-    //   }
-    // }
+
+    setupLimitSelector();
+
+    let selectedLimit = localStorage.getItem("selectedLimit") || 5;
+    console.log(selectedLimit);
+    loadTransactions(1, selectedLimit);
   } catch (err) {
     console.log(err.message);
   }
 });
-async function loadTransactions(page) {
+
+function setupLimitSelector() {
+  const paginationDiv = document.getElementById("pagination");
+
+  const label = document.createElement("label");
+  label.textContent = "Items per page: ";
+  label.setAttribute("for", "limitSelect");
+
+  const limitSelect = document.createElement("select");
+  limitSelect.id = "limitSelect";
+
+  [5, 10, 20].forEach((limit) => {
+    const option = document.createElement("option");
+    option.value = limit;
+    option.textContent = limit;
+    limitSelect.appendChild(option);
+  });
+
+  const savedLimit = localStorage.getItem("selectedLimit") || 5;
+  limitSelect.value = savedLimit;
+
+  limitSelect.addEventListener("change", () => {
+    const selectedLimit = limitSelect.value;
+    console.log(selectedLimit);
+    localStorage.setItem("selectedLimit", selectedLimit);
+    loadTransactions(1, selectedLimit); // reload from page 1
+  });
+
+  paginationDiv.appendChild(label);
+  paginationDiv.appendChild(limitSelect);
+}
+
+async function loadTransactions(page, limit) {
   try {
     const token = localStorage.getItem("token");
     const res = await axios.get(
-      `http://localhost:3000/transaction?page=${page}`,
-      {
-        headers: { Authorization: token },
-      }
+      `http://localhost:3000/transaction?page=${page}&limit=${limit}`,
+      { headers: { Authorization: token } }
     );
+
     const expenseList = document.getElementById("expenseList");
     expenseList.innerHTML = "";
+
     const expenses = res.data.expenseData;
     expenses.forEach((expense) => {
       displayTransactionOnScreen(expense);
     });
 
-    //pagination logic
     renderPagination(res.data);
   } catch (error) {
     console.log(error.message);
   }
 }
+
 async function renderPagination(paginationData) {
   try {
     const paginationDiv = document.getElementById("pagination");
+
+    // clear old page buttons but keep label + select
+    const existingSelect = document.getElementById("limitSelect");
+    const label = paginationDiv.querySelector("label");
     paginationDiv.innerHTML = "";
+    paginationDiv.appendChild(label);
+    paginationDiv.appendChild(existingSelect);
+
     const totalPages = paginationData.totalPages;
     const currentPage = paginationData.currentPage;
 
-    //prev button
+    // Prev
     const prev = document.createElement("button");
     prev.textContent = "Prev";
     prev.disabled = currentPage === 1;
     prev.addEventListener("click", () => {
-      loadTransactions(currentPage - 1);
+      const limit = localStorage.getItem("selectedLimit") || 5;
+      loadTransactions(currentPage - 1, limit);
     });
     paginationDiv.appendChild(prev);
+
+    // Page buttons
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPages, currentPage + 2);
-    if (currentPage <= 2) {
-      endPage = Math.min(5, totalPages);
-    }
-    if (currentPage >= totalPages - 1) {
-      startPage = Math.max(1, totalPages - 4);
-    }
+    if (currentPage <= 2) endPage = Math.min(5, totalPages);
+    if (currentPage >= totalPages - 1) startPage = Math.max(1, totalPages - 4);
+
     for (let i = startPage; i <= endPage; i++) {
       const pageBtn = document.createElement("button");
       pageBtn.textContent = i;
       pageBtn.disabled = i === currentPage;
-      pageBtn.onclick = () => loadTransactions(i);
+      pageBtn.onclick = () => {
+        const limit = localStorage.getItem("selectedLimit") || 5;
+        loadTransactions(i, limit);
+      };
       paginationDiv.appendChild(pageBtn);
     }
-    //next button
+
+    // Next
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Next";
     nextBtn.disabled = currentPage === totalPages;
-    nextBtn.onclick = () => loadTransactions(currentPage + 1);
+    nextBtn.onclick = () => {
+      const limit = localStorage.getItem("selectedLimit") || 5;
+      loadTransactions(currentPage + 1, limit);
+    };
     paginationDiv.appendChild(nextBtn);
   } catch (error) {
     console.log(error.message);
@@ -212,11 +252,13 @@ async function deleteExpenseData(id, li) {
   try {
     console.log("deleteExpenseData called.");
     const token = localStorage.getItem("token");
+    const selectedLimit = localStorage.getItem("selectedLimit") || 5;
     await axios.delete(`http://localhost:3000/transaction/${id}`, {
       headers: { Authorization: token },
     });
 
     li.remove();
+    loadTransactions(1, selectedLimit);
   } catch (err) {
     console.log(err);
   }
