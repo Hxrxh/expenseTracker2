@@ -21,7 +21,7 @@ app.use("/pay", paymentRouter);
 app.use("/premium", premiumRouter);
 app.use("/getCategory", aiRouter);
 app.use("/password", forgotPassRouter);
-db.sync({ alter: true })
+db.sync()
   .then(() => {
     app.listen(3000, () => {
       console.log("Server is running");

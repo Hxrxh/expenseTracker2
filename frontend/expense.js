@@ -136,7 +136,10 @@ async function handleTransactionForm(event) {
       desc: event.target.desc.value,
       category: AicategoryResponse.data.category,
       type: event.target.type.value,
+      note: event.target.notes.value,
     };
+
+    console.log(event.target.notes.value);
     const token = localStorage.getItem("token");
     const response = await axios.post(
       "http://localhost:3000/transaction",
@@ -234,7 +237,7 @@ function displayTransactionOnScreen(expenseDetails) {
   const expenseLi = document.createElement("li");
   expenseLi.dataset.id = expenseDetails.id;
   const textSpan = document.createElement("span");
-  textSpan.textContent = `${expenseDetails.expenseamount} - ${expenseDetails.description} - ${expenseDetails.category}`;
+  textSpan.textContent = `${expenseDetails.expenseamount} - ${expenseDetails.description} - ${expenseDetails.category} `;
   expenseLi.appendChild(textSpan);
 
   const deleteBtn = document.createElement("button");

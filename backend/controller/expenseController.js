@@ -7,7 +7,7 @@ const addExpense = async (req, res) => {
   try {
     const { id: userId } = req.user;
     console.log(userId);
-    const { amount, desc, category, type } = req.body;
+    const { amount, desc, category, type, note } = req.body;
 
     const addedExpense = await expenseTable.create(
       {
@@ -16,6 +16,7 @@ const addExpense = async (req, res) => {
         category: category,
         userId: userId,
         type: type,
+        note: note,
       },
       {
         transaction: t,

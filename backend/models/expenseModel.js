@@ -25,6 +25,10 @@ const expenseTable = sequelize.define("expenses", {
     allowNull: false,
     defaultValue: "expense",
   },
+  note: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 module.exports = expenseTable;
