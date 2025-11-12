@@ -1,9 +1,9 @@
 const { GoogleGenAI } = require("@google/genai");
 
 const client = new GoogleGenAI({
-  apiKey: "AIzaSyB_F09OETrbp1aGd02PfFvfM0GTyF4CTB0",
+  apiKey: process.env.gemini_api_key,
 });
-
+console.log("API Key:", process.env.gemini_api_key);
 const getCategory = async (req, res) => {
   try {
     const { prompt } = req.body;

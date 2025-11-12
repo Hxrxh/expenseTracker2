@@ -6,9 +6,9 @@ const addExpense = async (req, res) => {
   const t = await sequelize.transaction();
   try {
     const { id: userId } = req.user;
-    console.log(userId);
-    const { amount, desc, category, type, note } = req.body;
 
+    const { amount, desc, category, type, note } = req.body;
+    console.log(note);
     const addedExpense = await expenseTable.create(
       {
         expenseamount: amount,
@@ -55,7 +55,7 @@ const getExpenseData = async (req, res) => {
   try {
     const page = +req.query.page || 1;
     const limit = +req.query.limit || 5;
-    console.log(limit);
+
     const offset = (page - 1) * limit;
     const { id: userId } = req.user;
     const { count, rows: expenseData } = await expenseTable.findAndCountAll({

@@ -22,7 +22,7 @@ const addUserSignupDetails = async (req, res) => {
           email: email,
           password: hash,
         });
-        console.log(addedUserData);
+
         res.status(201).json({ message: "User signed up!" });
       });
     }
@@ -33,7 +33,7 @@ const addUserSignupDetails = async (req, res) => {
 };
 
 const generateToken = (id) => {
-  return jwt.sign({ userId: id }, "98cpe05ad32jil3cadffe42klax9321kdees0");
+  return jwt.sign({ userId: id }, `${process.env.JWT_SECRET}`);
 };
 const handleLogin = async (req, res) => {
   try {

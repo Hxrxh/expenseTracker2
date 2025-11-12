@@ -42,7 +42,7 @@ const paymentStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
     const orderStatus = await getPaymentStatus(orderId);
-    console.log(orderStatus);
+
     if (!orderStatus) {
       return res.status(500).send("No order status found");
     }

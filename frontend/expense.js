@@ -125,21 +125,22 @@ async function handleTransactionForm(event) {
     event.preventDefault();
     console.log("handle form subnmit called");
     const prompt = { prompt: event.target.desc.value };
-    console.log(prompt);
+
     const AicategoryResponse = await axios.post(
       "http://localhost:3000/getCategory",
       prompt
     );
-    console.log(AicategoryResponse);
+    const clean = AicategoryResponse.data.category.replace(/\*/g, "");
+    console.log(clean);
     const transactionDetails = {
       amount: event.target.amount.value,
       desc: event.target.desc.value,
-      category: AicategoryResponse.data.category,
+      category: clean,
       type: event.target.type.value,
-      note: event.target.notes.value,
+      note: event.target.note.value,
     };
 
-    console.log(event.target.notes.value);
+    console.log(event.target.note.value);
     const token = localStorage.getItem("token");
     const response = await axios.post(
       "http://localhost:3000/transaction",
@@ -157,11 +158,10 @@ async function handleTransactionForm(event) {
 }
 async function checkPremium(token) {
   try {
-    console.log(token, "checkPremium Called");
     const res = await axios.get("http://localhost:3000/user/check-premium", {
       headers: { Authorization: token },
     });
-    console.log(res.data, "checkPremium called");
+
     if (res.data.isPremium) {
       const premiumDiv = document.getElementById("premiumDiv");
       const heading = document.createElement("h2");

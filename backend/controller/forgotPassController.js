@@ -67,7 +67,6 @@ const updatePassword = async (req, res) => {
   const { newPass, confirmPass } = req.body;
   const forgotPassId = req.query.uuid;
   try {
-    console.log(forgotPassId, confirmPass);
     const forgotReq = await forgotPassReqTable.findByPk(forgotPassId);
     const userId = forgotReq.userId;
     const hash = await bcrypt.hash(confirmPass, 10);
