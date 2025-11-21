@@ -1,0 +1,2 @@
+::1 - - [21/Nov/2025:16:13:19 +0000] "GET /user/download HTTP/1.1" 404 152 "http://127.0.0.1:5500/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+::1 - - [21/Nov/2025:16:14:09 +0000] "GET /premium/download HTTP/1.1" 500 52 "http://127.0.0.1:5500/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"

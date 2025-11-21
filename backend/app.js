@@ -32,6 +32,7 @@ app.use("/pay", paymentRouter);
 app.use("/premium", premiumRouter);
 app.use("/getCategory", aiRouter);
 app.use("/password", forgotPassRouter);
+
 db.sync()
   .then(() => {
     app.listen(process.env.port, () => {

@@ -270,12 +270,12 @@ async function deleteExpenseData(id, li) {
 async function downloadExpenses() {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get("http://localhost:3000/user/download", {
+    const response = await axios.get("http://localhost:3000/premium/download", {
       headers: { Authorization: token },
     });
-    if (response.status === 201) {
+    if (response.status === 200) {
       var a = document.createElement("a");
-      a.href = response.data.fileUrl;
+      a.href = response.data.fileURL;
       a.download = "myexpense.csv";
       a.click();
     } else {
